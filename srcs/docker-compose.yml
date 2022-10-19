@@ -1,0 +1,37 @@
+services:
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    networks:
+      - mandatory
+    ports:
+      - "80:80"
+    volumes:
+      - wp-data:/var/www
+
+  wordpress:
+    container_name: wordpress
+    build: ./wordpress
+    networks:
+      - mandatory
+    volumes:
+      - wp-data:/var/www
+
+  # mariadb:
+  #   container_name: mariadb
+  #   build: ./mariadb
+  #   networks:
+  #     - mandatory
+  #   volumes:
+  #     - db-data:/var/lib/mysql
+
+networks:
+  mandatory:
+    name: "mandatory"
+    driver: "bridge"
+
+volumes:
+  wp-data:
+    name: wp-data
+  db-data:
+    name: db-data
