@@ -17,13 +17,17 @@ services:
     volumes:
       - wp-data:/var/www
 
-  # mariadb:
-  #   container_name: mariadb
-  #   build: ./mariadb
-  #   networks:
-  #     - mandatory
-  #   volumes:
-  #     - db-data:/var/lib/mysql
+  mariadb:
+    container_name: mariadb
+    build:
+      context: ./mariadb
+      args:
+        WP_PASS: ${WP_PASSWD}
+        WP_USER: ${WP_USER}
+    networks:
+      - mandatory
+    volumes:
+      - db-data:/var/lib/mysql
 
 networks:
   mandatory:
