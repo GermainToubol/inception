@@ -1,30 +1,22 @@
-if [[ ! -f "/var/www/blog/wp-config.php" ]]; then
-	# Setup the wp-config: $1: MDB_USER $2: MDB_PASSWD
-	wp core config					\
-	   --dbname=wpdatabase			\
-	   --dbuser="$1"				\
-	   --dbpass="$2"				\
-	   --dbhost=mariadb.mandatory	\
-	   --dbprefix=wp_				\
-	   --path="/var/www/blog";
-	shift 2;
+if [ ! -f "/var/www/blog/wp-config.php" ]; then
+	wp core config                  \
+       --dbname=wpdatabase          \
+       --dbuser="${MDB_USER}"       \
+       --dbpass="${MDB_PASSWD}"     \
+       --dbhost=mariadb.mandatory   \
+       --dbprefix=wp_               \
+       --path="/var/www/blog" --allow-root
 
-	# Install wordpress:
-	#   $1: WP_ADMIN
-	#   $2: WP_ADMIN_PASS
-	#   $3: WP_ADMIN_MAIL
-	wp core install					\
-	   --url="gtoubol.42paris.fr"	\
-	   --title="Titre du Site"		\
-	   --admin_user="$1"			\
-	   --admin_password="$2"		\
-	   --admin_email="$3"			\
-	   --path="/var/www/blog";
-	shift 3;
-else
-	# Should skip all the entries thought for the wp setup
-	shift 5;
+# 	# Install wordpress:
+ 	wp core install					\
+ 	   --url="gtoubol.42paris.fr"	\
+ 	   --title="Titre du Site"		\
+ 	   --admin_user="${WP_ADMIN}"	\
+ 	   --admin_password="${WP_ADMIN_PASS}"		\
+ 	   --admin_email="${WP_ADMIN_MAIL}"			\
+ 	   --path="/var/www/blog" --allow-root > /tmp/log2;
 fi
+chown -R www:www /var/www/blog
 
-# Exec the rest of the arguments (i.e. php_fpm8 -F)
+# Exec the main command (i.e. php_fpm8 -F)
 exec $@
