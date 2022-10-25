@@ -19,6 +19,9 @@ services:
       args:
         MDB_USER: ${MDB_USER}
         MDB_PASSWD: ${MDB_PASSWD}
+        WP_ADMIN: ${WP_ADMIN}
+        WP_ADMIN_PASS: ${WP_ADMIN_PASS}
+        WP_ADMIN_MAIL: ${WP_ADMIN_MAIL}
     networks:
       - mandatory
     volumes:

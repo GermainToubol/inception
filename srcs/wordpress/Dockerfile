@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 07:40:11 by gtoubol           #+#    #+#              #
-#    Updated: 2022/10/25 09:46:36 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/10/25 20:54:13 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 FROM alpine:3.16
@@ -29,21 +29,28 @@ RUN wget "http://fr.wordpress.org/latest-fr_FR.tar.gz";\
 	chown -R www-data:www-data /var/www/blog;
 
 COPY blog.conf /etc/php8/php-fpm.d/blog.conf
-COPY wp-confbase.php /var/www/blog/wp-confbase.php
 
 # Configure the access to the database
 # ------------------------------------------------------------------------------
 ARG MDB_USER
 ARG MDB_PASSWD
-RUN cd /var/www/blog; cat wp-confbase.php | sed -e "s/WP_DBUSER/${MDB_USER}/g" \
-	-e "s/WP_DBPASS/${MDB_PASSWD}/g" > wp-config.php
+ARG WP_ADMIN
+ARG WP_ADMIN_PASS
+ARG WP_ADMIN_MAIL
 
 # Get the tools to configure wordpress inside the database
 # ------------------------------------------------------------------------------
-COPY setup.sh /tmp/setup.sh
 RUN wget "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar";\
 	chmod +x wp-cli.phar; \
 	mv wp-cli.phar /usr/local/bin/wp;
 
-ENTRYPOINT ["/bin/sh", "/tmp/setup.sh"]
+COPY setup.sh /tmp/setup.sh
+RUN chmod +x /tmp/setup.sh
+
+ENTRYPOINT ["/tmp/setup.sh",\
+	"${MDB_USER}",			\
+	"${MDB_PASSWD}",		\
+	"${WP_ADMIN}",			\
+	"${WP_ADMIN_PASS}",		\
+	"${WP_ADMIN_MAIL}"]
 CMD ["/usr/sbin/php-fpm8", "-F"]
