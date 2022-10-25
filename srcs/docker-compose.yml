@@ -8,26 +8,37 @@ services:
       - "80:80"
     volumes:
       - wp-data:/var/www
+    restart: always
+    depends_on:
+      - wordpress
 
   wordpress:
     container_name: wordpress
-    build: ./wordpress
+    build:
+      context: ./wordpress
+      args:
+        MDB_USER: ${MDB_USER}
+        MDB_PASSWD: ${MDB_PASSWD}
     networks:
       - mandatory
     volumes:
       - wp-data:/var/www
+    restart: always
+    depends_on:
+      - mariadb
 
   mariadb:
     container_name: mariadb
     build:
       context: ./mariadb
       args:
-        WP_PASS: ${WP_PASSWD}
-        WP_USER: ${WP_USER}
+        MDB_USER: ${MDB_USER}
+        MDB_PASSWD: ${MDB_PASSWD}
     networks:
       - mandatory
     volumes:
       - db-data:/var/lib/mysql
+    restart: always
 
 networks:
   mandatory:

@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 06:51:48 by gtoubol           #+#    #+#              #
-#    Updated: 2022/10/22 18:06:41 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/10/22 21:10:40 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 FROM alpine:3.16
@@ -18,8 +18,11 @@ RUN chown -R mysql:mysql /var/lib/mysql;\
 
 COPY ./setup.sh /tmp/setup.sh
 
-ARG WP_PASS
-ARG WP_USER
+ARG MDB_USER
+ARG MDB_PASSWD
 
-RUN sh /tmp/setup.sh "${WP_USER}" "${WP_PASS}"
+RUN sh /tmp/setup.sh "${MDB_USER}" "${MDB_PASSWD}"
+RUN chown -R mysql:mysql /var/lib/mysql;\
+	mysql_install_db --user=mysql;
+
 ENTRYPOINT ["/usr/bin/mysqld", "-u", "mysql"]
