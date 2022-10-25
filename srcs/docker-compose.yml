@@ -51,5 +51,15 @@ networks:
 volumes:
   wp-data:
     name: wp-data
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "/home/gtoubol/data/wp-data"
   db-data:
     name: db-data
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "/home/gtoubol/data/db-data"

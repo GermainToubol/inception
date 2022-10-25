@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 11:00:32 by gtoubol           #+#    #+#              #
-#    Updated: 2022/10/25 23:13:45 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/10/26 00:30:52 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -15,6 +15,7 @@ SHELL='/bin/bash'
 # Start the containers
 # ------------------------------------------------------------------------------
 all:
+	mkdir -p $${HOME}/data/{wp-data,db-data}
 	pushd ./srcs;							\
 		sudo docker compose up --build --force-recreate -d;	\
 	popd;									\
@@ -44,6 +45,7 @@ clear-volumes: down
 			sudo docker volume rm $$volname;		\
 		fi;											\
 	done;
+	sudo rm -rf ${HOME}/data
 
 clear-images: down
 	echo "delete the images:"

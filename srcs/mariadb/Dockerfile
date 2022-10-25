@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 06:51:48 by gtoubol           #+#    #+#              #
-#    Updated: 2022/10/22 21:10:40 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/10/26 00:22:37 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 FROM alpine:3.16
@@ -22,7 +22,8 @@ ARG MDB_USER
 ARG MDB_PASSWD
 
 RUN sh /tmp/setup.sh "${MDB_USER}" "${MDB_PASSWD}"
-RUN chown -R mysql:mysql /var/lib/mysql;\
-	mysql_install_db --user=mysql;
+RUN mysql_install_db --user=root;\
+	chown -R mysql:mysql /var/lib/mysql;
+
 
 ENTRYPOINT ["/usr/bin/mysqld", "-u", "mysql"]
