@@ -6,17 +6,22 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 11:00:32 by gtoubol           #+#    #+#              #
-#    Updated: 2022/10/26 00:30:52 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/10/27 10:37:01 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
-SHELL='/bin/bash'
+SHELL	= '/bin/bash'
+DOMAIN	= gtoubol.42paris.fr
+CERT	= $(addprefix ./srcs/cert_utils/$(DOMAIN), .cnf .crt .csr .key)
 
 # Start the containers
 # ------------------------------------------------------------------------------
 all:
 	mkdir -p $${HOME}/data/{wp-data,db-data}
 	pushd ./srcs;							\
+		pushd ./cert_utils;					\
+			yes | ./utils.sh $(DOMAIN);		\
+		popd;								\
 		sudo docker compose up --build --force-recreate -d;	\
 	popd;									\
 
@@ -37,6 +42,9 @@ down:
 
 # Clear the datas at different levels
 # ------------------------------------------------------------------------------
+clear-site-keys:	down
+	rm -f $(CERT)
+
 clear-volumes: down
 	echo "delete the volumes:"
 	for volname in $$(sudo docker volume ls -q); do	\
@@ -55,6 +63,8 @@ clear-images: down
 			sudo docker rmi $$img;					\
 		fi;											\
 	done;
+
+fclean: clear-site-keys clear-volumes
 
 re: clear-volumes all
 

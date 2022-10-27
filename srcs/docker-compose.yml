@@ -16,12 +16,12 @@ services:
     container_name: wordpress
     build:
       context: ./wordpress
-      args:
-        MDB_USER: ${MDB_USER}
-        MDB_PASSWD: ${MDB_PASSWD}
-        WP_ADMIN: ${WP_ADMIN}
-        WP_ADMIN_PASS: ${WP_ADMIN_PASS}
-        WP_ADMIN_MAIL: ${WP_ADMIN_MAIL}
+    environment:
+      - MDB_USER=${MDB_USER}
+      - MDB_PASSWD=${MDB_PASSWD}
+      - WP_ADMIN=${WP_ADMIN}
+      - WP_ADMIN_PASS=${WP_ADMIN_PASS}
+      - WP_ADMIN_MAIL=${WP_ADMIN_MAIL}
     networks:
       - mandatory
     volumes:
@@ -34,9 +34,10 @@ services:
     container_name: mariadb
     build:
       context: ./mariadb
-      args:
-        MDB_USER: ${MDB_USER}
-        MDB_PASSWD: ${MDB_PASSWD}
+    environment:
+      - MDB_ROOT_PASSWD=${MDB_ROOT_PASSWD}
+      - MDB_USER=${MDB_USER}
+      - MDB_PASSWD=${MDB_PASSWD}
     networks:
       - mandatory
     volumes:
