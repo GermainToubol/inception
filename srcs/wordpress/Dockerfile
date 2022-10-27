@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 07:40:11 by gtoubol           #+#    #+#              #
-#    Updated: 2022/10/26 07:35:40 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/10/27 11:39:57 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 FROM alpine:3.16
@@ -30,7 +30,6 @@ RUN wget "http://fr.wordpress.org/latest-fr_FR.tar.gz";\
 	chown -R www-data:www-data /var/www/blog;
 
 COPY blog.conf /etc/php8/php-fpm.d/blog.conf
-COPY wp-confbase.php /var/www/blog/wp-confbase.php
 
 # Get the tools to configure wordpress inside the database
 # ------------------------------------------------------------------------------

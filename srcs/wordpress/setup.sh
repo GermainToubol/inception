@@ -18,11 +18,17 @@ if [ ! -f "/var/www/blog/wp-config.php" ]; then
  	# Install wordpress:
  	wp core install					\
  	   --url="gtoubol.42paris.fr"	\
- 	   --title="Titre du Site"		\
+ 	   --title="Inception"			\
  	   --admin_user="${WP_ADMIN}"	\
  	   --admin_password="${WP_ADMIN_PASS}"		\
  	   --admin_email="${WP_ADMIN_MAIL}"			\
  	   --path="/var/www/blog" --allow-root > /tmp/init.log 2>&1;
+
+	# Add a new user:
+	wp user create "${WP_USER}" "${WP_USER_MAIL}"	\
+	   --role="author"								\
+	   --user_pass="${WP_USER_PASS}"				\
+	   --path="/var/www/blog" --allow-root >> /tmp/init.log 2>&1;
 fi
 chown -R www-data:www-data /var/www/blog
 

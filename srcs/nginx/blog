@@ -3,12 +3,11 @@ upstream php {
 }
 
 server {
-	   listen 80;
-		#listen 443 ssl;
+		listen 443 ssl;
         ## Your website name goes here.
         server_name gtoubol.42paris.fr;
-		#ssl_certificate /tmp/hellfish.test.crt;
-		#ssl_certificate_key /tmp/hellfish.test.key;
+		ssl_certificate /run/secrets/wordpress_crt;
+		ssl_certificate_key /run/secrets/wordpress_key;
         ## Your only path reference.
         root /var/www/blog;
         ## This should be in your http block and if it is, it's not needed here.

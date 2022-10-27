@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 11:00:32 by gtoubol           #+#    #+#              #
-#    Updated: 2022/10/27 10:37:01 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/10/27 11:06:50 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -20,7 +20,7 @@ all:
 	mkdir -p $${HOME}/data/{wp-data,db-data}
 	pushd ./srcs;							\
 		pushd ./cert_utils;					\
-			yes | ./utils.sh $(DOMAIN);		\
+			yes "no" | ./utils.sh $(DOMAIN);\
 		popd;								\
 		sudo docker compose up --build --force-recreate -d;	\
 	popd;									\
@@ -43,6 +43,7 @@ down:
 # Clear the datas at different levels
 # ------------------------------------------------------------------------------
 clear-site-keys:	down
+	echo "delete the site keys"
 	rm -f $(CERT)
 
 clear-volumes: down
@@ -66,11 +67,13 @@ clear-images: down
 
 fclean: clear-site-keys clear-volumes
 
-re: clear-volumes all
+re: fclean all
 
 reset-hard: clear-images clear-volumes
 	echo "reset all datas"
 	sudo docker system prune -a
 
-.PHONY: all re stop down clear-volumes clear-images resert-hard
-.SILENT: all re stop down clear-volumes clear-images resert-hard
+.PHONY: all re stop down clear-site-keys clear-volumes
+.PHONY: clear-images fclean re resert-hard
+.SILENT: all re stop down clear-site-keys clear-volumes
+.SILENT: clear-images fclean re resert-hard

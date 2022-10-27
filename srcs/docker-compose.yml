@@ -5,9 +5,12 @@ services:
     networks:
       - mandatory
     ports:
-      - "80:80"
+      - "443:443"
     volumes:
       - wp-data:/var/www
+    secrets:
+      - wordpress_key
+      - wordpress_crt
     restart: always
     depends_on:
       - wordpress
@@ -22,6 +25,9 @@ services:
       - WP_ADMIN=${WP_ADMIN}
       - WP_ADMIN_PASS=${WP_ADMIN_PASS}
       - WP_ADMIN_MAIL=${WP_ADMIN_MAIL}
+      - WP_USER=${WP_USER}
+      - WP_USER_PASS=${WP_USER_PASS}
+      - WP_USER_MAIL=${WP_USER_MAIL}
     networks:
       - mandatory
     volumes:
@@ -64,3 +70,9 @@ volumes:
       type: none
       o: bind
       device: "/home/gtoubol/data/db-data"
+
+secrets:
+  wordpress_key:
+    file: "./cert_utils/${DOMAIN}.key"
+  wordpress_crt:
+    file: "./cert_utils/${DOMAIN}.crt"
