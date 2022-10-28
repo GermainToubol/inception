@@ -1,0 +1,97 @@
+services:
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    networks:
+      - mandatory
+    ports:
+      - "443:443"
+    volumes:
+      - wp-data:/var/www
+    secrets:
+      - wordpress_key
+      - wordpress_crt
+    restart: always
+    depends_on:
+      - wordpress
+
+  # ------------------
+  wordpress:
+    container_name: wordpress
+    build:
+      context: ./wordpress
+    environment:
+      - MDB_USER=${MDB_USER}
+      - MDB_PASSWD=${MDB_PASSWD}
+      - WP_ADMIN=${WP_ADMIN}
+      - WP_ADMIN_PASS=${WP_ADMIN_PASS}
+      - WP_ADMIN_MAIL=${WP_ADMIN_MAIL}
+      - WP_USER=${WP_USER}
+      - WP_USER_PASS=${WP_USER_PASS}
+      - WP_USER_MAIL=${WP_USER_MAIL}
+      - REDIS_PASSWD=${REDIS_PASSWD}
+    networks:
+      - mandatory
+    volumes:
+      - wp-data:/var/www
+    restart: always
+    depends_on:
+      - mariadb
+
+  # ------------------
+  mariadb:
+    container_name: mariadb
+    build:
+      context: ./mariadb
+    environment:
+      - MDB_ROOT_PASSWD=${MDB_ROOT_PASSWD}
+      - MDB_USER=${MDB_USER}
+      - MDB_PASSWD=${MDB_PASSWD}
+    networks:
+      - mandatory
+    volumes:
+      - db-data:/var/lib/mysql
+    restart: always
+
+  # ------------------
+  redis:
+    container_name: redis
+    build:
+      context: ./redis
+      args:
+        - REDIS_PASSWD=${REDIS_PASSWD}
+    networks:
+      - mandatory
+    restart: always
+    environment:
+      - REDIS_PASSWD=${REDIS_PASSWD}
+
+# ------------------------------------------------------------------------------
+networks:
+  mandatory:
+    name: "mandatory"
+    driver: "bridge"
+
+# ------------------------------------------------------------------------------
+volumes:
+  wp-data:
+    name: wp-data
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "/home/gtoubol/data/wp-data"
+  db-data:
+    name: db-data
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "/home/gtoubol/data/db-data"
+
+# ------------------------------------------------------------------------------
+secrets:
+  wordpress_key:
+    file: "./cert_utils/${DOMAIN}.key"
+  wordpress_crt:
+    file: "./cert_utils/${DOMAIN}.crt"

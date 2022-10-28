@@ -6,19 +6,23 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 11:00:32 by gtoubol           #+#    #+#              #
-#    Updated: 2022/10/27 11:06:50 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/10/28 12:57:44 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 SHELL	= '/bin/bash'
 DOMAIN	= gtoubol.42paris.fr
 CERT	= $(addprefix ./srcs/cert_utils/$(DOMAIN), .cnf .crt .csr .key)
+MAND	= ./srcs
+BONUS	= ./bonus
+
+DIR = $(BONUS)
 
 # Start the containers
 # ------------------------------------------------------------------------------
 all:
 	mkdir -p $${HOME}/data/{wp-data,db-data}
-	pushd ./srcs;							\
+	pushd $(DIR);							\
 		pushd ./cert_utils;					\
 			yes "no" | ./utils.sh $(DOMAIN);\
 		popd;								\
@@ -28,7 +32,7 @@ all:
 # Stop the containers
 # ------------------------------------------------------------------------------
 stop:
-	pushd ./srcs;						\
+	pushd $(DIR);						\
 		sudo docker compose stop;		\
 	popd;
 
@@ -36,7 +40,7 @@ stop:
 # ------------------------------------------------------------------------------
 down:
 	echo "Stop the containers";
-	pushd ./srcs;						\
+	pushd $(DIR);						\
 		sudo docker	compose down;		\
 	popd;								\
 
@@ -65,7 +69,7 @@ clear-images: down
 		fi;											\
 	done;
 
-fclean: clear-site-keys clear-volumes
+fclean: clear-volumes
 
 re: fclean all
 
