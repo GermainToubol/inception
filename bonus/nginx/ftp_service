@@ -1,0 +1,10 @@
+stream {
+	   upstream ftp {
+	   			server ftp.mandatory:21;
+		}
+
+		server {
+			   listen 21;
+			   proxy_pass ftp;
+		}
+}

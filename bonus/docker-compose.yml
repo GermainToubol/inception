@@ -14,6 +14,7 @@ services:
     restart: always
     depends_on:
       - wordpress
+      - ftp
 
   # ------------------
   wordpress:
@@ -37,6 +38,7 @@ services:
     restart: always
     depends_on:
       - mariadb
+      - redis
 
   # ------------------
   mariadb:
@@ -65,6 +67,27 @@ services:
     restart: always
     environment:
       - REDIS_PASSWD=${REDIS_PASSWD}
+
+  # ------------------
+  ftp:
+    container_name: ftp
+    build:
+      context: ./ftp
+    networks:
+      - mandatory
+    restart: always
+    depends_on:
+      - wordpress
+    environment:
+      - FTP_USER=${FTP_USER}
+      - FTP_PASSWD=${FTP_PASSWD}
+    volumes:
+      - wp-data:/home/${FTP_USER}/ftp
+    ports:
+      - "21:21"
+      - "4200-4242:4200-4242"
+    stop_signal: SIGKILL
+
 
 # ------------------------------------------------------------------------------
 networks:
