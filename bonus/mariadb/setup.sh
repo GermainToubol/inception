@@ -6,10 +6,15 @@ until tail "/tmp/mariastart.log" | grep -qi "Version:"; do
 	sleep 0.2
 done
 
-<< EOF mysql
+mysql <<EOF
 create database wpdatabase;
 grant all privileges on wpdatabase.* to '${MDB_USER}'@wordpress.mandatory identified by '${MDB_PASSWD}';
 alter user 'root'@'localhost' identified by '${MDB_ROOT_PASSWD}';
+flush privileges;
+EOF
+
+mysql --password="${MDB_ROOT_PASSWD}" <<EOF
+grant all privileges on wpdatabase.* to '${ADMINER_USER}'@adminer.mandatory identified by '${ADMINER_PASSWD}';
 flush privileges;
 EOF
 

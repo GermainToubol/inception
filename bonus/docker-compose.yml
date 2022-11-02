@@ -8,13 +8,14 @@ services:
       - "443:443"
     volumes:
       - wp-data:/var/www
+      - adm-data:/var/www/adminer
     secrets:
       - wordpress_key
       - wordpress_crt
     restart: always
     depends_on:
       - wordpress
-      - ftp
+      - adminer
 
   # ------------------
   wordpress:
@@ -49,6 +50,8 @@ services:
       - MDB_ROOT_PASSWD=${MDB_ROOT_PASSWD}
       - MDB_USER=${MDB_USER}
       - MDB_PASSWD=${MDB_PASSWD}
+      - ADMINER_USER=${ADMINER_USER}
+      - ADMINER_PASSWD=${ADMINER_PASSWD}
     networks:
       - mandatory
     volumes:
@@ -69,24 +72,37 @@ services:
       - REDIS_PASSWD=${REDIS_PASSWD}
 
   # ------------------
-  ftp:
-    container_name: ftp
+  # ftp:
+  #   container_name: ftp
+  #   build:
+  #     context: ./ftp
+  #   networks:
+  #     - mandatory
+  #   restart: always
+  #   depends_on:
+  #     - wordpress
+  #   environment:
+  #     - FTP_USER=${FTP_USER}
+  #     - FTP_PASSWD=${FTP_PASSWD}
+  #   volumes:
+  #     - wp-data:/home/${FTP_USER}/ftp
+  #   ports:
+  #     - "21:21"
+  #     - "4200-4242:4200-4242"
+  #   stop_signal: SIGKILL
+
+  # ------------------
+  adminer:
+    container_name: adminer
     build:
-      context: ./ftp
+      context: ./adminer
     networks:
       - mandatory
     restart: always
     depends_on:
-      - wordpress
-    environment:
-      - FTP_USER=${FTP_USER}
-      - FTP_PASSWD=${FTP_PASSWD}
+      - mariadb
     volumes:
-      - wp-data:/home/${FTP_USER}/ftp
-    ports:
-      - "21:21"
-      - "4200-4242:4200-4242"
-    stop_signal: SIGKILL
+      - adm-data:/var/www/adminer
 
 
 # ------------------------------------------------------------------------------
@@ -111,6 +127,13 @@ volumes:
       type: none
       o: bind
       device: "/home/gtoubol/data/db-data"
+  adm-data:
+    name: adm-data
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "/home/gtoubol/data/adm-data"
 
 # ------------------------------------------------------------------------------
 secrets:
