@@ -36,6 +36,10 @@ server {
                 }
         }
 
+		location /hugo/ {
+				 proxy_pass http://hugo.mandatory:1313;
+		}
+
         location /adminer/ {
                  root     /var/www/;
                  index    adminer.php;

@@ -16,6 +16,7 @@ services:
     depends_on:
       - wordpress
       - adminer
+      - hugo
 
   # ------------------
   wordpress:
@@ -104,6 +105,16 @@ services:
     volumes:
       - adm-data:/var/www/adminer
 
+  # ------------------
+  hugo:
+    container_name: hugo
+    build:
+      context: ./hugo
+    networks:
+      - mandatory
+    restart: always
+    volumes:
+      - hugo-data:/var/www/public
 
 # ------------------------------------------------------------------------------
 networks:
@@ -134,6 +145,13 @@ volumes:
       type: none
       o: bind
       device: "/home/gtoubol/data/adm-data"
+  hugo-data:
+    name: hugo-data
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "/home/gtoubol/data/hugo-data"
 
 # ------------------------------------------------------------------------------
 secrets:
