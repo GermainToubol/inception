@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 06:51:44 by gtoubol           #+#    #+#              #
-#    Updated: 2022/10/31 14:27:09 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/04 18:47:44 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -20,7 +20,6 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY blog /etc/nginx/sites-enabled/blog
 COPY ftp_service /etc/nginx/conf.d/ftp_service
 
-# EXPOSE 21
 EXPOSE 443
 
 ENTRYPOINT ["nginx","-g", "daemon off;" ]

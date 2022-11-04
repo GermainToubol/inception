@@ -37,7 +37,7 @@ server {
         }
 
 		location /hugo/ {
-				 proxy_pass http://hugo.mandatory:1313;
+				 proxy_pass http://hugo.mandatory:80;
 		}
 
         location /adminer/ {
@@ -46,8 +46,7 @@ server {
                  try_files $uri/ /adminer/adminer.php$args;
 
                 location ~ \.php {
-				fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                include fastcgi_params;
+				include fastcgi_params;
                 fastcgi_intercept_errors on;
                 fastcgi_pass adminer;
                 fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;

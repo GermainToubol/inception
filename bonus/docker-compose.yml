@@ -39,8 +39,10 @@ services:
       - wp-data:/var/www
     restart: always
     depends_on:
-      - mariadb
-      - redis
+      mariadb:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
   # ------------------
   mariadb:
@@ -58,6 +60,8 @@ services:
     volumes:
       - db-data:/var/lib/mysql
     restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
 
   # ------------------
   redis:
@@ -73,24 +77,27 @@ services:
       - REDIS_PASSWD=${REDIS_PASSWD}
 
   # ------------------
-  # ftp:
-  #   container_name: ftp
-  #   build:
-  #     context: ./ftp
-  #   networks:
-  #     - mandatory
-  #   restart: always
-  #   depends_on:
-  #     - wordpress
-  #   environment:
-  #     - FTP_USER=${FTP_USER}
-  #     - FTP_PASSWD=${FTP_PASSWD}
-  #   volumes:
-  #     - wp-data:/home/${FTP_USER}/ftp
-  #   ports:
-  #     - "21:21"
-  #     - "4200-4242:4200-4242"
-  #   stop_signal: SIGKILL
+  ftp:
+    container_name: ftp
+    build:
+      context: ./ftp
+    networks:
+      - mandatory
+    restart: always
+    depends_on:
+      - wordpress
+    environment:
+      - FTP_USER=${FTP_USER}
+      - FTP_PASSWD=${FTP_PASSWD}
+    volumes:
+      - wp-data:/home/${FTP_USER}/ftp
+    ports:
+      - "21:21"
+      - "4200-4242:4200-4242"
+    stop_signal: SIGKILL
+    secrets:
+      - wordpress_key
+      - wordpress_crt
 
   # ------------------
   adminer:
