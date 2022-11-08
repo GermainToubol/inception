@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 11:00:32 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/04 18:45:11 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/04 19:03:18 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -21,7 +21,7 @@ DIR = $(BONUS)
 # Start the containers
 # ------------------------------------------------------------------------------
 all:
-	mkdir -p $${HOME}/data/{wp-data,db-data,adm-data,hugo-data} $${HOME}/data/wp-data/blog
+	mkdir -p $${HOME}/data/{wp-data,db-data,adm-data,hugo-data}
 	pushd $(DIR);							\
 		pushd ./cert_utils;					\
 			yes "no" | ./utils.sh $(DOMAIN);\
