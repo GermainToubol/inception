@@ -32,9 +32,17 @@ wp user create "${WP_USER}" "${WP_USER_MAIL}"	\
    --path="/var/www/blog";
 
 # Change theme
-wp theme install inspiro\
-   --activate\
-   --path="/var/www/blog";
+if wp theme is-installed inspiro --path="/var/www/blog"; then :
+else
+	wp theme install inspiro\
+	   --activate\
+	   --path="/var/www/blog";
+
+	wp plugin install elementor --activate --path="/var/www/blog";
+	wp plugin install wpzoom-elementor-addons --activate --path="/var/www/blog";
+	wp plugin install one-click-demo-import --activate --path="/var/www/blog";
+	wp plugin install wpzoom-portfolio --activate --path="/var/www/blog";
+fi
 
 wp plugin install "redis-cache"\
    --activate\

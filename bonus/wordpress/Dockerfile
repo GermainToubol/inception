@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 07:40:11 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/04 17:14:16 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/04 19:04:39 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 FROM alpine:3.16
@@ -24,8 +24,8 @@ RUN	apk add --no-cache mariadb-client redis;\
 # ------------------------------------------------------------------------------
 RUN wget "http://fr.wordpress.org/latest-fr_FR.tar.gz";\
 	tar xzf latest-fr_FR.tar.gz;\
-	mkdir -p /var/www;\
-	mv wordpress /var/www/blog;\
+	mkdir -p /var/www/blog;\
+	cp -R wordpress/* /var/www/blog;\
 	rm latest-fr_FR.tar.gz; \
 	adduser --system --no-create-home www-data;\
 	chown -R www-data:www-data /var/www/blog;
