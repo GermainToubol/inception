@@ -21,4 +21,5 @@ EOF
 
 kill -TERM ${PID}
 chown -R mysql:mysql /var/lib/mysql;
+
 exec $@
