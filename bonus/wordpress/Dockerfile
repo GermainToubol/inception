@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 07:40:11 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/08 22:13:24 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/08 22:33:26 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -14,12 +14,12 @@
 # ------------------------------------------------------------------------------
 FROM alpine:3.16 AS base
 
-# Download the tool
+# Download the tools
 # -------------------------------
 RUN apk -U upgrade; apk add --no-cache php php-fpm php-opcache; \
 	apk add --no-cache php-gd php-mysqli php-zlib php-curl php-phar php-iconv;\
-	apk add --no-cache php-tokenizer php8-redis php-ctype;
-RUN	apk add --no-cache mariadb-client redis;\
+	apk add --no-cache php-tokenizer php8-redis php-ctype;\
+	apk add --no-cache mariadb-client redis;\
 	rm /etc/php8/php-fpm.d/*
 
 # Download wordpress
@@ -43,7 +43,7 @@ RUN wget "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.p
 FROM base AS wordpress-mandatory
 
 COPY blog.conf /etc/php8/php-fpm.d/blog.conf
-COPY setup.sh /tmp/setup.sh
+COPY setup_mandatory.sh /tmp/setup.sh
 
 ENTRYPOINT ["/bin/sh", "/tmp/setup.sh"]
 CMD ["/usr/sbin/php-fpm8", "-F"]
@@ -51,7 +51,7 @@ CMD ["/usr/sbin/php-fpm8", "-F"]
 # Bonus
 # ------------------------------------------------------------------------------
 FROM wordpress-mandatory AS wordpress-bonus
-COPY setup.sh /tmp/setup.sh
+COPY setup_bonus.sh /tmp/setup.sh
 
 ENTRYPOINT ["/bin/sh", "/tmp/setup.sh"]
 CMD ["/usr/sbin/php-fpm8", "-F"]

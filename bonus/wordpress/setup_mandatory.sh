@@ -1,9 +1,4 @@
-# # Wait for mariadb
-# mariadb --user="${MDB_USER}" --password="${MDB_PASSWD}" -D wpdatabase -h mariadb.mandatory -e "show tables;"
-# while [ $? -ne 0 ]; do
-# 	sleep 2;
-# 	mariadb --user="${MDB_USER}" --password="${MDB_PASSWD}" -D wpdatabase -h mariadb.mandatory -e "show tables;"
-# done
+#!/bin/sh
 
 # Configure wordpress:
 if [ ! -f "/var/www/blog/wp-config.php" ]; then
@@ -43,24 +38,6 @@ else
 	wp plugin install one-click-demo-import --activate --path="/var/www/blog";
 	wp plugin install wpzoom-portfolio --activate --path="/var/www/blog";
 fi
-
-wp plugin install "redis-cache"\
-   --activate\
-   --path="/var/www/blog";
-
-wp config set "WP_CACHE_KEY_SALT" "gtoubol.42paris.fr"\
-   --path="/var/www/blog";
-wp config set "WP_REDIS_HOST" "redis.mandatory"\
-   --path="/var/www/blog";
-wp config set "WP_REDIS_PASSWORD" ""\
-   --path="/var/www/blog";
-wp config set "WP_REDIS_TIMEOUT" 1 --raw\
-   --path="/var/www/blog";
-wp config set "WP_REDIS_READ_TIMEOUT" 1 --raw\
-   --path="/var/www/blog";
-wp config set "WP_REDIS_DATABASE" 0 --raw\
-   --path="/var/www/blog";
-wp redis enable --path="/var/www/blog";
 
 chown -R www-data:www-data /var/www/blog
 
