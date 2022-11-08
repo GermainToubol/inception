@@ -1,33 +1,29 @@
-upstream php {
-        server wordpress:9000;
+upstream adminer_cgi {
+		 server adminer:9000;
 }
 
 server {
-        listen 443 ssl;
+	   listen 443 ssl;
         ## Your website name goes here.
-        server_name gtoubol.42paris.fr;
+        server_name adminer.gtoubol.42paris.fr;
         ssl_certificate /run/secrets/wordpress_crt;
         ssl_certificate_key /run/secrets/wordpress_key;
         ## Your only path reference.
         ## This should be in your http block and if it is, it's not needed here.
-		root /var/www/blog;
-		index index.php;
+		root     /var/www/adminer;
+        index    adminer.php;
 
         location / {
-                 try_files $uri $uri/ /index.php?$args;
+				 try_files $uri/ adminer.php$args;
 		}
-        location ~ \.php$ {
+
+		location ~ \.php$ {
         		 #NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
 				 include fastcgi_params;
 				 fastcgi_intercept_errors on;
-				 fastcgi_pass php;
+				 fastcgi_pass adminer_cgi;
 				 #The following parameter can be also included in fastcgi_params file
 				 fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
-				 access_log /var/log/nginx/phpfpmonly-access0.log;
+				 access_log /var/log/nginx/phpfpmonly-access.log;
         }
-
-		location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
-				 expires max;
-				 log_not_found off;
-		}
 }
