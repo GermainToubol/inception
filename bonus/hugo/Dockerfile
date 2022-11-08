@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/02 20:23:49 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/08 17:36:44 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/08 19:42:49 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -21,7 +21,8 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 # Hugo
 COPY hugo /etc/nginx/sites-enabled/hugo
-COPY config.toml /tmp/
+COPY config.toml /tmp/config.toml
+COPY all-about-inception.md /tmp/content/all-about-inception.md
 COPY setup.sh /tmp/setup.sh
 
 ENTRYPOINT ["/bin/sh", "/tmp/setup.sh"]
