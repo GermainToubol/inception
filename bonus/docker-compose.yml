@@ -7,16 +7,19 @@ services:
     ports:
       - "443:443"
     volumes:
-      - wp-data:/var/www
+      - wp-data:/var/www/blog
       - adm-data:/var/www/adminer
     secrets:
       - wordpress_key
       - wordpress_crt
     restart: always
     depends_on:
-      - wordpress
-      - adminer
-      - hugo
+      wordpress:
+        condition: service_healthy
+      adminer:
+        condition: service_healthy
+      hugo:
+        condition: service_started
 
   # ------------------
   wordpress:
@@ -36,8 +39,10 @@ services:
     networks:
       - mandatory
     volumes:
-      - wp-data:/var/www
+      - wp-data:/var/www/blog
     restart: always
+    healthcheck:
+      test: ["CMD", "nc", "-z", "wordpress.mandatory", "9000"]
     depends_on:
       mariadb:
         condition: service_healthy
@@ -85,12 +90,13 @@ services:
       - mandatory
     restart: always
     depends_on:
-      - wordpress
+      wordpress:
+        condition: service_healthy
     environment:
       - FTP_USER=${FTP_USER}
       - FTP_PASSWD=${FTP_PASSWD}
     volumes:
-      - wp-data:/home/${FTP_USER}/ftp
+      - wp-data:/home/${FTP_USER}/
     ports:
       - "21:21"
       - "4200-4242:4200-4242"
@@ -111,6 +117,8 @@ services:
       - mariadb
     volumes:
       - adm-data:/var/www/adminer
+    healthcheck:
+        test: ["CMD", "nc", "-z", "adminer.mandatory", "9000"]
 
   # ------------------
   hugo:
