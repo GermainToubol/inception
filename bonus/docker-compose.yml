@@ -61,6 +61,8 @@ services:
       context: ./mariadb
     environment:
       - MDB_ROOT_PASSWD=${MDB_ROOT_PASSWD}
+      - MDB_HEALTH=${MDB_HEALTH}
+      - MDB_HEALTH_PASSWD=${MDB_HEALTH_PASSWD}
       - MDB_USER=${MDB_USER}
       - MDB_PASSWD=${MDB_PASSWD}
       - ADMINER_USER=${ADMINER_USER}
