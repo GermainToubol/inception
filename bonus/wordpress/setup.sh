@@ -48,7 +48,6 @@ wp plugin install "redis-cache"\
    --activate\
    --path="/var/www/blog";
 
-# wp core update --path="/var/www/blog" --allow-root;
 wp config set "WP_CACHE_KEY_SALT" "gtoubol.42paris.fr"\
    --path="/var/www/blog";
 wp config set "WP_REDIS_HOST" "redis.mandatory"\
@@ -65,4 +64,5 @@ wp redis enable --path="/var/www/blog";
 
 chown -R www-data:www-data /var/www/blog
 
+echo "exec $@"
 exec $@

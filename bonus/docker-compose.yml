@@ -1,7 +1,10 @@
 services:
   nginx:
     container_name: nginx
-    build: ./nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+      target: nginx-bonus
     networks:
       - mandatory
     ports:
@@ -26,6 +29,8 @@ services:
     container_name: wordpress
     build:
       context: ./wordpress
+      dockerfile: Dockerfile
+      target: wordpress-bonus
     environment:
       - MDB_USER=${MDB_USER}
       - MDB_PASSWD=${MDB_PASSWD}
@@ -42,7 +47,7 @@ services:
       - wp-data:/var/www/blog
     restart: always
     healthcheck:
-      test: ["CMD", "nc", "-z", "wordpress.mandatory", "9000"]
+      test: ["CMD", "nc", "-z", "wordpress", "9000"]
     depends_on:
       mariadb:
         condition: service_healthy

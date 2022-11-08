@@ -9,14 +9,14 @@ else
 	echo "Website already initialized."
 fi
 
-if [ 1 "$(ls -A /var/www/public)" ]; then
+if [ ! "$(ls -A /var/www/public)" ]; then
 	echo "Create config file";
 	cp /tmp/config.toml /hugo/config.toml;
 
 	echo "Create posts"
-	for file in "$(ls /tmp/content)"; do
+	for file in $(ls /tmp/content); do
 		hugo new "posts/${file}";
-		cp "/tmp/${file}" "/hugo/content/posts/${file}"
+		cp "/tmp/content/${file}" "/hugo/content/posts/${file}"
 	done
 
 	echo "Generate website"
