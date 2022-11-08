@@ -6,21 +6,29 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 06:51:44 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/08 06:54:46 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/08 20:51:23 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
-# Install the preultimate version of alpine
-FROM alpine:3.16
+EXPOSE 443
 
-RUN apk -U upgrade; apk add nginx openssl;
+# General requirements to run an nginx server with ssl connection.
+# ------------------------------------------------------------------------------
+FROM alpine:3.16 AS base
+RUN apk --no-cache add nginx openssl;
+
 RUN adduser --system --no-create-home www-data;
 
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY blog /etc/nginx/sites-enabled/blog
-COPY adminer /etc/nginx/sites-enabled/adminer
-COPY static /etc/nginx/sites-enabled/static
-
-EXPOSE 443
-
 ENTRYPOINT ["nginx","-g", "daemon off;" ]
+
+# Mandatory part
+# ------------------------------------------------------------------------------
+FROM base AS nginx-mandatory
+COPY blog /etc/nginx/sites-enabled/blog	# Only add wordpress configuration
+
+# Bonus part
+# ------------------------------------------------------------------------------
+FROM nginx-mandatory AS nginx-bonus
+COPY adminer /etc/nginx/sites-enabled/adminer # Adminer redirection
+COPY static /etc/nginx/sites-enabled/static	  # Hugo redirection
