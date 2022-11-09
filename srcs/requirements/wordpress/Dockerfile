@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 07:40:11 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/09 16:35:51 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/09 18:19:56 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -16,11 +16,12 @@ FROM alpine:3.15 AS base
 
 # Download the tools
 # -------------------------------
-RUN apk -U upgrade; apk add --no-cache php php-fpm php-opcache; \
-	apk add --no-cache php-gd php-mysqli php-zlib php-curl php-phar php-iconv;\
-	apk add --no-cache php-tokenizer php8-redis php-ctype;\
+RUN apk -U upgrade; apk add --no-cache php8 php8-fpm php8-opcache; \
+	apk add --no-cache php8-gd php8-mysqli php8-zlib php8-curl php8-phar php8-iconv;\
+	apk add --no-cache php8-tokenizer php8-redis php8-ctype php8-json;\
 	apk add --no-cache mariadb-client redis;\
-	rm /etc/php8/php-fpm.d/*
+	ln -s /usr/bin/php8 /bin/php;\
+	rm -f /etc/php8/php-fpm.d/*
 
 # Download wordpress
 # -------------------------------

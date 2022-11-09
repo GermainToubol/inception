@@ -3,7 +3,7 @@ services:
   nginx:
     container_name: nginx
     build:
-      context: ./nginx
+      context: ./requirements/nginx
       dockerfile: Dockerfile
       target: nginx-bonus
     networks:
@@ -29,7 +29,7 @@ services:
   wordpress:
     container_name: wordpress
     build:
-      context: ./wordpress
+      context: ./requirements/wordpress
       dockerfile: Dockerfile
       target: wordpress-bonus
     environment:
@@ -59,7 +59,7 @@ services:
   mariadb:
     container_name: mariadb
     build:
-      context: ./mariadb
+      context: ./requirements/mariadb
       dockerfile: Dockerfile
       target: mariadb-bonus
     environment:
@@ -82,7 +82,7 @@ services:
   redis:
     container_name: redis
     build:
-      context: ./redis
+      context: ./requirements/redis
       args:
         - REDIS_PASSWD=${REDIS_PASSWD}
     networks:
@@ -95,7 +95,7 @@ services:
   ftp:
     container_name: ftp
     build:
-      context: ./ftp
+      context: ./requirements/ftp
     networks:
       - mandatory
     restart: always
@@ -119,7 +119,7 @@ services:
   adminer:
     container_name: adminer
     build:
-      context: ./adminer
+      context: ./requirements/adminer
     networks:
       - mandatory
     restart: always
@@ -134,7 +134,7 @@ services:
   hugo:
     container_name: hugo
     build:
-      context: ./hugo
+      context: .*/requirements/hugo
     networks:
       - mandatory
     restart: always
