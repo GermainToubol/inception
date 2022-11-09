@@ -1,15 +1,14 @@
 #!/bin/sh
 
 # Configure wordpress:
-if [ ! -f "/var/www/blog/wp-config.php" ]; then
-	wp core config                  \
-       --dbname=wpdatabase          \
-       --dbuser="${MDB_USER}"       \
-       --dbpass="${MDB_PASSWD}"     \
-       --dbhost=mariadb.mandatory   \
-       --dbprefix=wp_               \
-       --path="/var/www/blog";
-fi
+rm -f /var/www/blog/wp-config.php
+wp core config                  \
+   --dbname=wpdatabase          \
+   --dbuser="${MDB_USER}"       \
+   --dbpass="${MDB_PASSWD}"     \
+   --dbhost=mariadb.mandatory   \
+   --dbprefix=wp_               \
+   --path="/var/www/blog";
 
 # Install wordpress:
 wp core install					\
