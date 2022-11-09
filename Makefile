@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 11:00:32 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/09 07:06:35 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/09 07:38:37 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -14,11 +14,11 @@ SHELL	= '/bin/bash'
 DOMAIN	= gtoubol.42paris.fr
 CERT	= $(addprefix ./srcs/cert_utils/$(DOMAIN), .cnf .crt .csr .key)
 
-DIR 	= bonus
+DIR 	= srcs
 
 # Start the containers
 # ------------------------------------------------------------------------------
-all:	dirs
+all:	dirs down-bonus
 	pushd $(DIR);							\
 		pushd ./cert_utils;					\
 			yes "no" | ./utils.sh $(DOMAIN);\
@@ -30,7 +30,7 @@ all:	dirs
 				-d;							\
 	popd;									\
 
-bonus:	dirs
+bonus:	dirs down
 	pushd $(DIR);							\
 		pushd ./cert_utils;					\
 			yes "no" | ./utils.sh $(DOMAIN);\
@@ -43,19 +43,20 @@ bonus:	dirs
 	popd;									\
 
 
-# Stop the containers
-# ------------------------------------------------------------------------------
-stop:
-	pushd $(DIR);						\
-		sudo docker compose stop;		\
-	popd;
-
 # Remove the containers
 # ------------------------------------------------------------------------------
 down:
-	echo "Stop the containers";
+	echo "Stop mandatory containers";
 	pushd $(DIR);						\
-		sudo docker	compose -f docker-compose-bonus.yml down;		\
+		sudo docker	compose down;		\
+	popd;								\
+
+down-bonus:
+	echo "Stop bonus containers";
+	pushd $(DIR);						\
+		sudo docker	compose				\
+			-f docker-compose-bonus.yml	\
+			down;						\
 	popd;								\
 
 # Clear the datas at different levels
@@ -64,7 +65,7 @@ clear-site-keys:	down
 	echo "delete the site keys"
 	rm -f $(CERT)
 
-clear-volumes: down
+clear-volumes: down-bonus down
 	echo "delete the volumes:"
 	for volname in $$(sudo docker volume ls -q); do	\
 		if [ -n "$$volname" ]; then					\
@@ -74,7 +75,7 @@ clear-volumes: down
 	done;
 	sudo rm -rf ${HOME}/data
 
-clear-images: down
+clear-images: down-bonus down
 	echo "delete the images:"
 	for img in "$$(sudo docker images -q)"; do		\
 		if [ -n "$$img" ]; then						\
@@ -94,7 +95,7 @@ reset-hard: clear-images clear-volumes
 	echo "reset all datas"
 	sudo docker system prune -a
 
-.PHONY: all re stop down clear-site-keys clear-volumes
+.PHONY: all re stop down down-bonus clear-site-keys clear-volumes
 .PHONY: clear-images fclean re resert-hard dirs bonus
-.SILENT: all re stop down clear-site-keys clear-volumes
+.SILENT: all re stop down down-bonus clear-site-keys clear-volumes
 .SILENT: clear-images fclean re resert-hard dirs bonus
