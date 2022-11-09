@@ -6,28 +6,42 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 11:00:32 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/04 19:03:18 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/09 07:06:35 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 SHELL	= '/bin/bash'
 DOMAIN	= gtoubol.42paris.fr
 CERT	= $(addprefix ./srcs/cert_utils/$(DOMAIN), .cnf .crt .csr .key)
-MAND	= ./srcs
-BONUS	= ./bonus
 
-DIR = $(BONUS)
+DIR 	= bonus
 
 # Start the containers
 # ------------------------------------------------------------------------------
-all:
-	mkdir -p $${HOME}/data/{wp-data,db-data,adm-data,hugo-data}
+all:	dirs
 	pushd $(DIR);							\
 		pushd ./cert_utils;					\
 			yes "no" | ./utils.sh $(DOMAIN);\
 		popd;								\
-		sudo docker compose up --build --force-recreate -d;	\
+		sudo docker compose 				\
+			-f docker-compose.yml up		\
+				--build						\
+				--force-recreate			\
+				-d;							\
 	popd;									\
+
+bonus:	dirs
+	pushd $(DIR);							\
+		pushd ./cert_utils;					\
+			yes "no" | ./utils.sh $(DOMAIN);\
+		popd;								\
+		sudo docker compose 				\
+			-f docker-compose-bonus.yml up	\
+				--build						\
+				--force-recreate			\
+				-d;							\
+	popd;									\
+
 
 # Stop the containers
 # ------------------------------------------------------------------------------
@@ -41,7 +55,7 @@ stop:
 down:
 	echo "Stop the containers";
 	pushd $(DIR);						\
-		sudo docker	compose down;		\
+		sudo docker	compose -f docker-compose-bonus.yml down;		\
 	popd;								\
 
 # Clear the datas at different levels
@@ -69,6 +83,9 @@ clear-images: down
 		fi;											\
 	done;
 
+dirs:
+	mkdir -p $${HOME}/data/{wp-data,db-data,adm-data,hugo-data}
+
 fclean: clear-volumes
 
 re: fclean all
@@ -78,6 +95,6 @@ reset-hard: clear-images clear-volumes
 	sudo docker system prune -a
 
 .PHONY: all re stop down clear-site-keys clear-volumes
-.PHONY: clear-images fclean re resert-hard
+.PHONY: clear-images fclean re resert-hard dirs bonus
 .SILENT: all re stop down clear-site-keys clear-volumes
-.SILENT: clear-images fclean re resert-hard
+.SILENT: clear-images fclean re resert-hard dirs bonus

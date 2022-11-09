@@ -1,24 +1,32 @@
+---
 services:
   nginx:
     container_name: nginx
-    build: ./nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+      target: nginx-mandatory
     networks:
       - mandatory
     ports:
       - "443:443"
     volumes:
-      - wp-data:/var/www
+      - wp-data:/var/www/blog
     secrets:
       - wordpress_key
       - wordpress_crt
     restart: always
     depends_on:
-      - wordpress
+      wordpress:
+        condition: service_healthy
 
+  # ------------------
   wordpress:
     container_name: wordpress
     build:
       context: ./wordpress
+      dockerfile: Dockerfile
+      target: wordpress-mandatory
     environment:
       - MDB_USER=${MDB_USER}
       - MDB_PASSWD=${MDB_PASSWD}
@@ -31,30 +39,44 @@ services:
     networks:
       - mandatory
     volumes:
-      - wp-data:/var/www
+      - wp-data:/var/www/blog
     restart: always
+    healthcheck:
+      test: ["CMD", "nc", "-z", "wordpress", "9000"]
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
 
+  # ------------------
   mariadb:
     container_name: mariadb
     build:
       context: ./mariadb
+      dockerfile: Dockerfile
+      target: mariadb-bonus
     environment:
       - MDB_ROOT_PASSWD=${MDB_ROOT_PASSWD}
+      - MDB_HEALTH=${MDB_HEALTH}
+      - MDB_HEALTH_PASSWD=${MDB_HEALTH_PASSWD}
       - MDB_USER=${MDB_USER}
       - MDB_PASSWD=${MDB_PASSWD}
+      - ADMINER_USER=${ADMINER_USER}
+      - ADMINER_PASSWD=${ADMINER_PASSWD}
     networks:
       - mandatory
     volumes:
       - db-data:/var/lib/mysql
     restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--user='${MDB_HEALTH}'", "--password='${MDB_HEALTH_PASSWD}'", "--silent"]
 
+# ------------------------------------------------------------------------------
 networks:
   mandatory:
     name: "mandatory"
     driver: "bridge"
 
+# ------------------------------------------------------------------------------
 volumes:
   wp-data:
     name: wp-data
@@ -63,6 +85,7 @@ volumes:
       type: none
       o: bind
       device: "/home/gtoubol/data/wp-data"
+
   db-data:
     name: db-data
     driver: local
@@ -71,8 +94,10 @@ volumes:
       o: bind
       device: "/home/gtoubol/data/db-data"
 
+# ------------------------------------------------------------------------------
 secrets:
   wordpress_key:
     file: "./cert_utils/${DOMAIN}.key"
   wordpress_crt:
     file: "./cert_utils/${DOMAIN}.crt"
+...

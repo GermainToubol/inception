@@ -1,3 +1,4 @@
+---
 services:
   nginx:
     container_name: nginx
@@ -59,6 +60,8 @@ services:
     container_name: mariadb
     build:
       context: ./mariadb
+      dockerfile: Dockerfile
+      target: mariadb-bonus
     environment:
       - MDB_ROOT_PASSWD=${MDB_ROOT_PASSWD}
       - MDB_HEALTH=${MDB_HEALTH}
@@ -73,7 +76,7 @@ services:
       - db-data:/var/lib/mysql
     restart: always
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "--silent"]
+      test: ["CMD", "mysqladmin", "ping", "--user='${MDB_HEALTH}'", "--password='${MDB_HEALTH_PASSWD}'", "--silent"]
 
   # ------------------
   redis:
@@ -153,6 +156,7 @@ volumes:
       type: none
       o: bind
       device: "/home/gtoubol/data/wp-data"
+
   db-data:
     name: db-data
     driver: local
@@ -160,6 +164,7 @@ volumes:
       type: none
       o: bind
       device: "/home/gtoubol/data/db-data"
+
   adm-data:
     name: adm-data
     driver: local
@@ -167,6 +172,7 @@ volumes:
       type: none
       o: bind
       device: "/home/gtoubol/data/adm-data"
+
   hugo-data:
     name: hugo-data
     driver: local
@@ -181,3 +187,4 @@ secrets:
     file: "./cert_utils/${DOMAIN}.key"
   wordpress_crt:
     file: "./cert_utils/${DOMAIN}.crt"
+...
