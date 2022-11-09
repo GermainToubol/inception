@@ -6,11 +6,11 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/28 22:21:08 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/09 16:00:03 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/09 16:36:05 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
-FROM alpine:3.16
+FROM alpine:3.15
 
 RUN apk -U upgrade; apk add --no-cache vsftpd openssl;
 

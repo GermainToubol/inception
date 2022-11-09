@@ -6,11 +6,11 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/31 18:29:25 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/09 15:52:24 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/09 16:35:44 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
-FROM alpine:3.16
+FROM alpine:3.15
 
 RUN apk add --no-cache php8 php8-fpm php-mysqli mariadb-client php-session;
 RUN wget "https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-en.php";\

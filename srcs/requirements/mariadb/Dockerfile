@@ -6,13 +6,13 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 06:51:48 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/09 16:14:11 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/09 16:36:12 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 # General requirements
 # ------------------------------------------------------------------------------
-FROM alpine:3.16 AS base
+FROM alpine:3.15 AS base
 
 RUN apk -U upgrade; apk add --no-cache mariadb mariadb-client;
 COPY conf/mariadb.conf /etc/my.cnf

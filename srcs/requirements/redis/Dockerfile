@@ -6,11 +6,11 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/27 11:57:26 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/09 16:22:22 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/09 16:36:24 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
-FROM alpine:3.16
+FROM alpine:3.15
 
 ARG REDIS_PASSWD
 ENV REDIS_PASSWD=${REDIS_PASSWD}

@@ -6,14 +6,14 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 06:51:44 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/09 16:18:38 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/09 16:36:18 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 
 # General requirements to run an nginx server with ssl connection.
 # ------------------------------------------------------------------------------
-FROM alpine:3.16 AS base
+FROM alpine:3.15 AS base
 
 EXPOSE 443
 

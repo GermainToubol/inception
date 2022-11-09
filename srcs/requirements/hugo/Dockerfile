@@ -6,11 +6,11 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/02 20:23:49 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/09 16:07:30 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/09 16:35:59 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
-FROM alpine:3.16
+FROM alpine:3.15
 RUN apk add --no-cache hugo git nginx;
 RUN mkdir -p /var/www/public /hugo;
 
