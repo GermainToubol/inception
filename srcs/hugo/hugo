@@ -1,9 +1,0 @@
-server {
-	   listen 80;
-	   server_name static.gtoubol.42paris.fr;
-	   root /var/www/public;
-
-	   location / {
-	   			try_files $uri $uri/ =404;
-		}
-}
