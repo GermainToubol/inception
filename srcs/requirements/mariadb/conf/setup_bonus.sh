@@ -10,7 +10,7 @@ mysql <<EOF
 create database wpdatabase;
 grant all privileges on wpdatabase.* to '${MDB_USER}'@wordpress.mandatory identified by '${MDB_PASSWD}';
 alter user 'root'@'localhost' identified by '${MDB_ROOT_PASSWD}';
-create user '${MDB_HEALTH}'@'localhost' identified by '${MDB_HEALTH_PASSWD}';
+grant usage on wpdatabase.* to '${MDB_HEALTH}'@'localhost' identified by '${MDB_HEALTH_PASSWD}';
 flush privileges;
 EOF
 

@@ -134,12 +134,28 @@ services:
   hugo:
     container_name: hugo
     build:
-      context: .*/requirements/hugo
+      context: ./requirements/hugo
     networks:
       - mandatory
     restart: always
     volumes:
       - hugo-data:/var/www/public
+
+  # ------------------
+  jupyterhub:
+    container_name: jupyterhub
+    build:
+      context: ./requirements/jupyterhub
+    networks:
+      - mandatory
+    restart: always
+    environment:
+      - PY_ADMIN=${PY_ADMIN}
+      - PY_ADMIN_PASSWD=${PY_ADMIN_PASSWD}
+      - PY_USER=${PY_USER}
+      - PY_USER_PASSWD=${PY_USER_PASSWD}
+    volumes:
+      - jupyter-data:/home
 
 # ------------------------------------------------------------------------------
 networks:
@@ -181,10 +197,19 @@ volumes:
       o: bind
       device: "/home/gtoubol/data/hugo-data"
 
+  jupyter-data:
+    name: jupyter-data
+    driver: local
+    driver_opts:
+      type:none
+      o: bind
+      device: "/home/gtoubol/data/jupyter-data"
+
 # ------------------------------------------------------------------------------
 secrets:
   wordpress_key:
     file: "./cert_utils/${DOMAIN}.key"
   wordpress_crt:
     file: "./cert_utils/${DOMAIN}.crt"
+
 ...

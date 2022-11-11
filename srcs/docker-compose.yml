@@ -43,6 +43,7 @@ services:
     restart: always
     healthcheck:
       test: ["CMD", "nc", "-z", "wordpress", "9000"]
+      start_period: 15s
     depends_on:
       mariadb:
         condition: service_healthy
@@ -69,6 +70,7 @@ services:
     restart: always
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--user='${MDB_HEALTH}'", "--password='${MDB_HEALTH_PASSWD}'", "--silent"]
+      start_period: 5s
 
 # ------------------------------------------------------------------------------
 networks:

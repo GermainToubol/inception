@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 11:00:32 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/09 07:38:37 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/11 23:59:00 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -18,7 +18,7 @@ DIR 	= srcs
 
 # Start the containers
 # ------------------------------------------------------------------------------
-all:	dirs down-bonus
+all:	dirs down
 	pushd $(DIR);							\
 		pushd ./cert_utils;					\
 			yes "no" | ./utils.sh $(DOMAIN);\
@@ -48,6 +48,9 @@ bonus:	dirs down
 down:
 	echo "Stop mandatory containers";
 	pushd $(DIR);						\
+		sudo docker	compose				\
+			-f docker-compose-bonus.yml	\
+			down;						\
 		sudo docker	compose down;		\
 	popd;								\
 
@@ -85,7 +88,7 @@ clear-images: down-bonus down
 	done;
 
 dirs:
-	mkdir -p $${HOME}/data/{wp-data,db-data,adm-data,hugo-data}
+	mkdir -p $${HOME}/data/{wp-data,db-data,adm-data,hugo-data,jupyter-data}
 
 fclean: clear-volumes
 

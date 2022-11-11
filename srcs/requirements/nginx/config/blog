@@ -3,7 +3,7 @@ upstream php {
 }
 
 server {
-        listen 443 ssl;
+        listen 443 default_server ssl;
         ## Your website name goes here.
         server_name gtoubol.42paris.fr;
         ssl_certificate /run/secrets/wordpress_crt;

@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 06:51:44 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/09 16:36:18 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/11 20:18:23 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -33,3 +33,4 @@ COPY config/blog /etc/nginx/sites-enabled/blog
 FROM nginx-mandatory AS nginx-bonus
 COPY config/adminer /etc/nginx/sites-enabled/adminer
 COPY config/static /etc/nginx/sites-enabled/static
+COPY config/jupyterhub /etc/nginx/sites-enabled/jupyterhub
