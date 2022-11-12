@@ -24,6 +24,8 @@ services:
         condition: service_healthy
       hugo:
         condition: service_started
+      jupyterhub:
+        condition: service_started
 
   # ------------------
   wordpress:
@@ -49,6 +51,7 @@ services:
     restart: always
     healthcheck:
       test: ["CMD", "nc", "-z", "wordpress", "9000"]
+      start_period: 35s
     depends_on:
       mariadb:
         condition: service_healthy
@@ -77,6 +80,7 @@ services:
     restart: always
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--user='${MDB_HEALTH}'", "--password='${MDB_HEALTH_PASSWD}'", "--silent"]
+      start_period: 15s
 
   # ------------------
   redis:
@@ -201,7 +205,7 @@ volumes:
     name: jupyter-data
     driver: local
     driver_opts:
-      type:none
+      type: none
       o: bind
       device: "/home/gtoubol/data/jupyter-data"
 

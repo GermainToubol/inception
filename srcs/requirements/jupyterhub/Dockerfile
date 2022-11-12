@@ -6,7 +6,7 @@
 #    By: gtoubol <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/11 14:49:19 by gtoubol           #+#    #+#              #
-#    Updated: 2022/11/11 23:50:57 by gtoubol          ###   ########.fr        #
+#    Updated: 2022/11/12 01:17:34 by gtoubol          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -21,8 +21,8 @@ RUN apk update; apk add --no-cache py3-pip py3-alembic py3-async_generator py3-o
 RUN pip install --no-cache jupyterhub; npm install -g configurable-http-proxy;
 RUN apk add --no-cache jupyter-notebook linux-pam; pip install --no-cache jupyterlab notebook;
 
-COPY setup.sh /tmp/setup.sh
-COPY ./jupyterhub-config.py /etc/jupyterhub-config.py
+COPY ./config/setup.sh /tmp/setup.sh
+COPY ./config/jupyterhub-config.py /etc/jupyterhub-config.py
 
 ENTRYPOINT ["/bin/sh", "/tmp/setup.sh"]
-CMD ["jupyterhub"]
+CMD ["jupyterhub", "-f", "/etc/jupyterhub-config.py"]

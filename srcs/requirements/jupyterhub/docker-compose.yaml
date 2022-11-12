@@ -1,5 +1,0 @@
-services:
-  jupyterhub:
-    container_name: jupyterhub
-    build: .
-    stop_signal: SIGKILL
